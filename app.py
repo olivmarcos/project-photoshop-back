@@ -39,7 +39,7 @@ def upload():
 
         image_url = url_for("uploaded_file", filename=file.filename)
         return jsonify(
-            {"message": "File uploaded successfully", "image_url": image_url }
+            {"message": "File uploaded successfully", "image_url": image_url}
         )
 
     return jsonify({"error": "Invalid file format"})
