@@ -3,3 +3,6 @@ __pycache__
 
 uploads/*
 !uploads/.gitkeep
+
+altered/*
+!altered/.gitkeep
