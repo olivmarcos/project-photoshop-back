@@ -1,5 +1,5 @@
 import os
-from filters import negative, logarithm
+from filters import negative, logarithm, invLogarithm, pow, root
 
 ALTERED_FOLDER = "./altered"
 
@@ -15,6 +15,21 @@ def execute(filter, image_name):
 
     if filter == "logarithm":
         new_image = logarithm(image_name)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+
+    if filter == "invLogarithm":
+        new_image = invLogarithm(image_name)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+
+    if filter == "pow":
+        new_image = pow(image_name)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+
+    if filter == "root":
+        new_image = root(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     return image_name
