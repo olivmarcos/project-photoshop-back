@@ -49,7 +49,7 @@ def invLogarithm(image_name):
     
     return copy
 
-def pow(image_name): #add o expoente ,exp
+def power(image_name): #add o expoente ,exp
     image = getImage(image_name)
     copy = image.copy()
     exp = 2 #remover
