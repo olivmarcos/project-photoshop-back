@@ -1,4 +1,3 @@
-import os
 from flask import Flask, flash, request, jsonify, send_from_directory
 from flask_cors import CORS
 
@@ -46,8 +45,9 @@ def apply_negative_effect():
 
     filter_to_apply = data.get("filterToApply")
     file_name = data.get("fileName")
+    gamma = data.get("gamma")
 
-    new_file = apply_filter_service.execute(filter_to_apply, file_name)
+    new_file = apply_filter_service.execute(filter_to_apply, file_name, gamma)
 
     return jsonify({"message": "File altered successfully", "file_name": new_file})
 

@@ -9,11 +9,14 @@ def allowed_filter(filter):
     return filter in ALLOWED_FILTERS
 
 
-def execute(filter, image_name):
+def execute(filter, image_name, gamma):
     if not filter or not image_name:
         return False
 
     if not allowed_filter(filter):
+        return False
+
+    if not gamma:
         return False
 
     if filter == "negative":
@@ -29,11 +32,11 @@ def execute(filter, image_name):
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "power":
-        new_image = filters.power(image_name)
+        new_image = filters.power(image_name, gamma)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "root":
-        new_image = filters.root(image_name)
+        new_image = filters.root(image_name, gamma)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     return image_name
