@@ -77,3 +77,24 @@ def root(image_name, gamma):
             copy.putpixel((i, j), output_pixel)
 
     return copy
+
+
+def rotation_ninety_degree(image_name, gamma):
+    image = getImage(image_name)
+    copy = image.copy()
+    # TO-DO
+    return copy
+
+
+def rotation_counterclockwise_ninety_degree(image_name, gamma):
+    image = getImage(image_name)
+    copy = image.copy()
+    # TO-DO
+    return copy
+
+
+def rotation_one_hundred_eighty(image_name, gamma):
+    image = getImage(image_name)
+    copy = image.copy()
+    # TO-DO
+    return copy
