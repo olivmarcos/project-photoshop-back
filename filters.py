@@ -98,3 +98,31 @@ def rotation_one_hundred_eighty(image_name, gamma):
     copy = image.copy()
     # TO-DO
     return copy
+
+
+def expansion(image_name, gamma): #add ", constant"
+    image = getImage(image_name)
+    copy = image.copy()
+    a = gamma
+    b = 0 # constant
+
+    for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            original_pixel = image.getpixel((i, j))
+            output_pixel = int(a * original_pixel + b)
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+
+def compression(image_name, gamma): #add ", constant"
+    image = getImage(image_name)
+    copy = image.copy()
+    a = gamma
+    b = 0 # constant
+
+    for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            original_pixel = image.getpixel((i, j))
+            output_pixel = int((original_pixel / a) - b)
+            copy.putpixel((i, j), output_pixel)
+    return copy
