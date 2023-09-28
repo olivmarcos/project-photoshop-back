@@ -13,7 +13,8 @@ ALLOWED_FILTERS = [
     "rotation-counterclockwise-ninety-degree",
     "rotation-one-hundred-eighty",
     "expansion",
-    "compression"
+    "compression",
+    "add-two-images",
 ]
 
 
@@ -21,7 +22,7 @@ def allowed_filter(filter):
     return filter in ALLOWED_FILTERS
 
 
-def execute(filter, image_name, gamma):#add ", constant"
+def execute(filter, image_name, second_image_name, gamma, aValue, bValue):
     if not filter or not image_name:
         return False
 
@@ -64,12 +65,16 @@ def execute(filter, image_name, gamma):#add ", constant"
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "expansion":
-        new_image = filters.expansion(image_name, gamma) #add ", constant"
+        new_image = filters.expansion(image_name, aValue, bValue)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "compression":
-        new_image = filters.compression(image_name, gamma) #add ", constant"
+        new_image = filters.compression(image_name, aValue, bValue)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
- 
+
+    if filter == "add-two-images":
+        percentage = 25
+        new_image = filters.add_two_images(image_name, second_image_name, percentage)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     return image_name
