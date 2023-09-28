@@ -14,7 +14,7 @@ ALLOWED_FILTERS = [
     "rotation-one-hundred-eighty",
     "expansion",
     "compression",
-    "add-two-images"
+    "add-two-images",
 ]
 
 
