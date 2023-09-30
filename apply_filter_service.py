@@ -1,6 +1,4 @@
-from email.mime import image
 import os
-from unittest import findTestCases
 import filters
 
 ALTERED_FOLDER = "./altered"
@@ -17,7 +15,8 @@ ALLOWED_FILTERS = [
     "expansion",
     "compression",
     "add-two-images",
-    "nearest-neighbor-resampling"
+    "nearest-neighbor-resampling",
+    "bilinear-interpolation-resampling",
 ]
 
 
@@ -25,7 +24,7 @@ def allowed_filter(filter):
     return filter in ALLOWED_FILTERS
 
 
-def execute(filter, image_name, second_image_name, gamma, aValue, bValue, enlargement_factor):
+def execute(filter, image_name, second_image_name, gamma, aValue, bValue, scale_factor):
     if not filter or not image_name:
         return False
 
@@ -80,8 +79,12 @@ def execute(filter, image_name, second_image_name, gamma, aValue, bValue, enlarg
         new_image = filters.add_two_images(image_name, second_image_name, percentage)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
-    if filter == 'nearest-neighbor-resampling':
-        new_image = filters.nearest_neighbor_resampling(image_name, enlargement_factor)
+    if filter == "nearest-neighbor-resampling":
+        new_image = filters.nearest_neighbor_resampling(image_name, scale_factor)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+    if filter == "bilinear-interpolation-resampling":
+        new_image = filters.bilinear_interpolation_resampling(image_name, scale_factor)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     return image_name

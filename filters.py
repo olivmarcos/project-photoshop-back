@@ -99,17 +99,20 @@ def rotation_one_hundred_eighty(image_name, gamma):
     # TO-DO
     return copy
 
+
 def expansion(image_name, aValue, bValue):
     image = getImage(image_name)
     copy = image.copy()
     # TO-DO
     return copy
 
+
 def compression(image_name, aValue, bValue):
     image = getImage(image_name)
     copy = image.copy()
     # TO-DO
     return copy
+
 
 def add_two_images(image_name, second_image_name, percentage):
     image = getImage(image_name)
@@ -120,24 +123,63 @@ def add_two_images(image_name, second_image_name, percentage):
     # TO-DO
     return copy
 
-def nearest_neighbor_resampling(image_name, enlargement_factor):
+
+def nearest_neighbor_resampling(image_name, scale_factor):
     original_image = getImage(image_name)
     original_width = original_image.size[0]
-    original_heigth = original_image.size[1]
+    original_height = original_image.size[1]
 
-    new_width = original_width * enlargement_factor
-    new_heigth = original_heigth * enlargement_factor
+    new_width = original_width * scale_factor
+    new_heigth = original_height * scale_factor
 
     new_size = (new_width, new_heigth)
 
-    elarged_image = Image.new('L', new_size)
+    elarged_image = Image.new("L", new_size)
 
     for i in range(0, elarged_image.size[0] - 1):
         for j in range(0, elarged_image.size[1] - 1):
-            original_i = i // enlargement_factor
-            original_j = j // enlargement_factor
+            original_i = i // scale_factor
+            original_j = j // scale_factor
 
             original_pixel = original_image.getpixel((original_i, original_j))
             elarged_image.putpixel((i, j), original_pixel)
+
+    return elarged_image
+
+
+def bilinear_interpolation_resampling(image_name, scale_factor):
+    original_image = getImage(image_name)
+    original_width = original_image.size[0]
+    original_height = original_image.size[1]
+
+    new_width = original_width * scale_factor
+    new_heigth = original_height * scale_factor
+    new_size = (new_width, new_heigth)
+
+    elarged_image = Image.new("L", new_size)
+
+    width_scale = float(original_width - 1) / (new_width - 1)
+    height_scale = float(original_height - 1) / (new_heigth - 1)
+
+    for i in range(0, elarged_image.size[0] - 1):
+        for j in range(0, elarged_image.size[1] - 1):
+            row = i * width_scale
+            col = j * height_scale
+
+            row_1 = int(row)
+            row_2 = min(int(row) + 1, original_width - 1)
+            col_1 = int(col)
+            col_2 = min(int(col) + 1, original_height - 1)
+
+            value_1 = (col_2 - col) * original_image.getpixel((row_1, col_1)) + (
+                col - col_1
+            ) * original_image.getpixel((row_1, col_2))
+
+            value_2 = (col_2 - col) * original_image.getpixel((row_2, col_1)) + (
+                col - col_1
+            ) * original_image.getpixel((row_2, col_2))
+
+            interpolated_value = int((row_2 - row) * value_1 + (row - row_1) * value_2)
+            elarged_image.putpixel((i, j), interpolated_value)
 
     return elarged_image
