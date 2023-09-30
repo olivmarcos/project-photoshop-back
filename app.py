@@ -49,9 +49,16 @@ def apply_negative_effect():
     aValue = data.get("aValue")
     bValue = data.get("bValue")
     second_image_name = data.get("secondFileName")
-    
+    enlargement_factor = data.get("dimension")
+
     new_file = apply_filter_service.execute(
-        filter_to_apply, file_name, second_image_name, gamma, aValue, bValue
+        filter_to_apply,
+        file_name,
+        second_image_name,
+        gamma,
+        aValue,
+        bValue,
+        enlargement_factor,
     )
 
     return jsonify({"message": "File altered successfully", "file_name": new_file})

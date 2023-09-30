@@ -119,3 +119,25 @@ def add_two_images(image_name, second_image_name, percentage):
     secondCopy = secondImage.copy()
     # TO-DO
     return copy
+
+def nearest_neighbor_resampling(image_name, enlargement_factor):
+    original_image = getImage(image_name)
+    original_width = original_image.size[0]
+    original_heigth = original_image.size[1]
+
+    new_width = original_width * enlargement_factor
+    new_heigth = original_heigth * enlargement_factor
+
+    new_size = (new_width, new_heigth)
+
+    elarged_image = Image.new('L', new_size)
+
+    for i in range(0, elarged_image.size[0] - 1):
+        for j in range(0, elarged_image.size[1] - 1):
+            original_i = i // enlargement_factor
+            original_j = j // enlargement_factor
+
+            original_pixel = original_image.getpixel((original_i, original_j))
+            elarged_image.putpixel((i, j), original_pixel)
+
+    return elarged_image
