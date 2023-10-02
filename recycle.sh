@@ -1,14 +1,16 @@
 #!/bin/bash
 
-directory="uploads"
+# List of directories to clean up
+directories=("uploads" "altered" "histograms")
 
-if [ -d "$directory" ]; then
-    cd "$directory"
+for directory in "${directories[@]}"; do
+    if [ -d "$directory" ]; then
+        cd "$directory"
 
-    find . ! -name ".gitkeep" -type f -exec rm -f {} \;
+        find . ! -name ".gitkeep" -type f -exec rm -f {} \;
 
-    cd ..
-
-else
-    echo "Directory '$directory' does not exist."
-fi
+        cd ..
+    else
+        echo "Directory '$directory' does not exist."
+    fi
+done
