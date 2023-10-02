@@ -1,8 +1,11 @@
+from crypt import methods
+from fileinput import filename
 from flask import Flask, flash, request, jsonify, send_from_directory
 from flask_cors import CORS
 
 import upload_file_service
 import apply_filter_service
+import generate_histogram
 
 app = Flask(__name__)
 
@@ -11,6 +14,9 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 ALTERED_FOLDER = "altered"
 app.config["ALTERED_FOLDER"] = ALTERED_FOLDER
+
+HISTOGRAMS_FOLDER = "histograms"
+app.config["HISTOGRAMS_FOLDER"] = HISTOGRAMS_FOLDER
 
 allowed_origins = ["http://localhost:5173"]
 CORS(app, resources={r"/api/*": {"origins": allowed_origins}})
@@ -64,14 +70,34 @@ def apply_negative_effect():
     return jsonify({"message": "File altered successfully", "file_name": new_file})
 
 
-@app.route("/api/v1/uploads/<filename>")
-def uploaded_file(filename):
-    return send_from_directory(app.config["UPLOAD_FOLDER"], filename)
+@app.route("/api/v1/uploads/<file_name>", methods=["GET"])
+def uploaded_file(file_name):
+    return send_from_directory(app.config["UPLOAD_FOLDER"], file_name)
 
 
-@app.route("/api/v1/altered/<filename>")
-def altered_file(filename):
-    return send_from_directory(app.config["ALTERED_FOLDER"], filename)
+@app.route("/api/v1/altered/<file_name>", methods=["GET"])
+def altered_file(file_name):
+    return send_from_directory(app.config["ALTERED_FOLDER"], file_name)
+
+
+@app.route("/api/v1/histogram", methods=["POST"])
+def create_histogram():
+    data = request.get_json()
+    file_name = data.get("fileName")
+
+    histogram_file_name = generate_histogram.execute(file_name)
+
+    return jsonify(
+        {
+            "message": "Generated histogram succesfully",
+            "data": {"fileName": histogram_file_name},
+        }
+    )
+
+
+@app.route("/api/v1/histogram/<file_name>", methods=["GET"])
+def get_histogram(file_name):
+    return send_from_directory(app.config["HISTOGRAMS_FOLDER"], file_name)
 
 
 if __name__ == "__main__":

@@ -1,17 +1,20 @@
 import os
 from werkzeug.utils import secure_filename
+from datetime import datetime
 
 UPLOAD_FOLDER = "./uploads"
 ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", 'bmp'}
 
-def allowed_file(filename):
-    return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+def allowed_file(file_name: str) -> bool:
+    return "." in file_name and file_name.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def execute(file):
+def execute(file) -> str | bool:
     if not allowed_file(file.filename):
         return False
     
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(UPLOAD_FOLDER, filename))
+    file_name = secure_filename(file.filename)
+    current_dateTime = datetime.now()
+    file_name = str(current_dateTime.microsecond) + "_" + file_name
+    file.save(os.path.join(UPLOAD_FOLDER, file_name))
 
-    return filename
+    return file_name

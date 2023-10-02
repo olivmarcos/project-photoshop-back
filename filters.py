@@ -1,15 +1,11 @@
 import numpy as np
 from PIL import Image
+import image_service
 
 UPLOAD_FOLDER = "./uploads"
 
-
-def getImage(image_name):
-    return Image.open(UPLOAD_FOLDER + "/" + image_name).convert("L")
-
-
 def negative(image_name):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
 
     for i in range(0, image.size[0] - 1):
@@ -24,7 +20,7 @@ def negative(image_name):
 # caso queira botar uma area para o usuario informar o valor da contante,me informe que eu ajusto, o Sergio achoq ue disse que o valor padrão era 105.886  mas vou confirmar com ele hj
 # eu tbm n sei acho que vai precisar importar o numpy pra mexer com contas eu n sei se vc tem ele . . .  deve ter . . .
 def logarithm(image_name):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     c = 255 / np.log(256)
     copy = image.copy()
 
@@ -38,7 +34,7 @@ def logarithm(image_name):
 
 
 def invLogarithm(image_name):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
 
     for i in range(0, image.size[0] - 1):
@@ -52,7 +48,7 @@ def invLogarithm(image_name):
 
 
 def power(image_name, gamma):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
     exponent = gamma
     for i in range(0, image.size[0] - 1):
@@ -65,7 +61,7 @@ def power(image_name, gamma):
 
 
 def root(image_name, gamma):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
     index = gamma
     for i in range(0, image.size[0] - 1):
@@ -80,52 +76,52 @@ def root(image_name, gamma):
 
 
 def rotation_ninety_degree(image_name, gamma):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
     # TO-DO
     return copy
 
 
 def rotation_counterclockwise_ninety_degree(image_name, gamma):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
     # TO-DO
     return copy
 
 
 def rotation_one_hundred_eighty(image_name, gamma):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
     # TO-DO
     return copy
 
 
 def expansion(image_name, aValue, bValue):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
     # TO-DO
     return copy
 
 
 def compression(image_name, aValue, bValue):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
     # TO-DO
     return copy
 
 
 def add_two_images(image_name, second_image_name, percentage):
-    image = getImage(image_name)
+    image = image_service.get_image(image_name)
     copy = image.copy()
 
-    secondImage = getImage(second_image_name)
+    secondImage = image_service.get_image(second_image_name)
     secondCopy = secondImage.copy()
     # TO-DO
     return copy
 
 
 def nearest_neighbor_resampling(image_name, scale_factor):
-    original_image = getImage(image_name)
+    original_image = image_service.get_image(image_name)
     original_width = original_image.size[0]
     original_height = original_image.size[1]
 
@@ -148,7 +144,7 @@ def nearest_neighbor_resampling(image_name, scale_factor):
 
 
 def bilinear_interpolation_resampling(image_name, scale_factor):
-    original_image = getImage(image_name)
+    original_image = image_service.get_image(image_name)
     original_width = original_image.size[0]
     original_height = original_image.size[1]
 

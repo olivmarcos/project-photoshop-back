@@ -6,3 +6,6 @@ uploads/*
 
 altered/*
 !altered/.gitkeep
+
+histograms/*
+!histograms/.gitkeep
