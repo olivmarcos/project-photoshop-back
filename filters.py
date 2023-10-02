@@ -75,24 +75,58 @@ def root(image_name, gamma):
     return copy
 
 
-def rotation_ninety_degree(image_name, gamma):
+def rotation_ninety_degree(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
-    # TO-DO
+
+    for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((image.size[1] - 1 - j, i))
+            copy.putpixel((i, j), output_pixel)
     return copy
 
 
-def rotation_counterclockwise_ninety_degree(image_name, gamma):
+def rotation_counterclockwise_ninety_degree(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
-    # TO-DO
+
+    for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((j, image.size[0] - 1 - i))
+            copy.putpixel((i, j), output_pixel)
     return copy
 
 
-def rotation_one_hundred_eighty(image_name, gamma):
+def rotation_one_hundred_eighty(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
-    # TO-DO
+    
+     for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((image.size[0] - 1 - i, image.size[1] - 1 - j))
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+
+def horizontal_invert(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    
+     for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((image.size[0] - 1 - i, j))
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+
+def vertical_invert(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    
+     for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((i, image.size[1] - 1 - j))
+            copy.putpixel((i, j), output_pixel)
     return copy
 
 
