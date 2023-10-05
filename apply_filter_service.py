@@ -1,4 +1,6 @@
 import os
+
+import flask
 import filters
 
 ALTERED_FOLDER = "./altered"
@@ -18,6 +20,8 @@ ALLOWED_FILTERS = [
     "nearest-neighbor-resampling",
     "bilinear-interpolation-resampling",
     "average",
+    "horizontal-mirroring",
+    "vertical-mirroring"
 ]
 
 
@@ -61,15 +65,23 @@ def execute(
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "rotation-ninety-degree":
-        new_image = filters.rotation_ninety_degree(image_name, gamma)
+        new_image = filters.rotation_ninety_degree(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "rotation-counterclockwise-ninety-degree":
-        new_image = filters.rotation_counterclockwise_ninety_degree(image_name, gamma)
+        new_image = filters.rotation_counterclockwise_ninety_degree(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "rotation-one-hundred-eighty":
-        new_image = filters.root(image_name, gamma)
+        new_image = filters.rotation_one_hundred_eighty(image_name)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+    if filter == "horizontal-mirroring":
+        new_image = filters.horizontal_mirroring(image_name)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+    if filter == "vertical-mirroring":
+        new_image = filters.vertical_mirroring(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "expansion":
