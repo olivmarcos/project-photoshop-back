@@ -20,6 +20,7 @@ ALLOWED_FILTERS = [
     "average",
     "horizontal-mirroring",
     "vertical-mirroring",
+    "laplace"
 ]
 
 
@@ -110,6 +111,10 @@ def execute(
 
     if filter == "average":
         new_image = filters.average(image_name)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+    if filter == "laplace":
+        new_image = filters.laplace(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     return image_name

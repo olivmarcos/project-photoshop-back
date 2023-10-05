@@ -25,10 +25,10 @@ def logarithm(image_name):
     c = 255 / np.log(256)
     copy = image.copy()
 
-    for i in range(0, image.size[0] - 1):
-        for j in range(0, image.size[1] - 1):
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
             original_pixel = image.getpixel((i, j))
-            output_pixel = int(c * np.log(1 + original_pixel))
+            output_pixel = int(np.round(c * np.log(1 + original_pixel)))
             copy.putpixel((i, j), output_pixel)
 
     return copy
@@ -38,11 +38,11 @@ def invLogarithm(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
 
-    for i in range(0, image.size[0] - 1):
-        for j in range(0, image.size[1] - 1):
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
             original_pixel = image.getpixel((i, j))
             exp = original_pixel / 105.886
-            output_pixel = int(np.power(10, exp))
+            output_pixel = int(np.round(np.power(10, exp)))
             copy.putpixel((i, j), output_pixel)
 
     return copy
@@ -52,10 +52,10 @@ def power(image_name, gamma):
     image = image_service.get_image(image_name)
     copy = image.copy()
     exponent = gamma
-    for i in range(0, image.size[0] - 1):
-        for j in range(0, image.size[1] - 1):
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
             original_pixel = image.getpixel((i, j))
-            output_pixel = int(np.power(((original_pixel + 1) / 256), exponent) * 256)
+            output_pixel = int(np.round(np.power(((original_pixel + 1) / 256), exponent) * 256))
             copy.putpixel((i, j), output_pixel)
 
     return copy
@@ -65,11 +65,11 @@ def root(image_name, gamma):
     image = image_service.get_image(image_name)
     copy = image.copy()
     index = gamma
-    for i in range(0, image.size[0] - 1):
-        for j in range(0, image.size[1] - 1):
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
             original_pixel = image.getpixel((i, j))
-            output_pixel = int(
-                np.power(((original_pixel + 1) / 256), (1 / index)) * 256
+            output_pixel = int(np.round
+                (np.power(((original_pixel + 1) / 256), (1 / index)) * 256)
             )
             copy.putpixel((i, j), output_pixel)
 
@@ -144,10 +144,10 @@ def expansion(image_name, aValue, bValue):
     a = aValue
     b = bValue
 
-    for i in range(0, image.size[0] - 1):
-        for j in range(0, image.size[1] - 1):
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
             original_pixel = image.getpixel((i, j))
-            output_pixel = int(a * original_pixel + b)
+            output_pixel = int(np.round(a * original_pixel + b))
             copy.putpixel((i, j), output_pixel)
 
     return copy
@@ -159,10 +159,10 @@ def compression(image_name, aValue, bValue):
     a = aValue
     b = bValue
 
-    for i in range(0, image.size[0] - 1):
-        for j in range(0, image.size[1] - 1):
+    for i in range(0, image.size[0]): 
+        for j in range(0, image.size[1]):
             original_pixel = image.getpixel((i, j))
-            output_pixel = int((original_pixel / a) - b)
+            output_pixel = int(np.round((original_pixel / a) - b))
             copy.putpixel((i, j), output_pixel)
 
     return copy
@@ -179,14 +179,14 @@ def add_two_images(image_name: str, second_image_name: str, merge_percentage=int
     a = merge_percentage
     b = 100 - merge_percentage
 
-    for i in range(0, image.size[0] - 1):
-        for j in range(0, image.size[1] - 1):
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
             percentage_original_pixel = int(a * (image.getpixel((i, j)) / 100))
             percentage_second_original_pixel = int(
                 b * (secondImage.getpixel((i, j)) / 100)
             )
-            output_pixel = int(
-                percentage_original_pixel + percentage_second_original_pixel
+            output_pixel = int(np.round
+                (percentage_original_pixel + percentage_second_original_pixel)
             )
             copy.putpixel((i, j), output_pixel)
 
@@ -257,55 +257,6 @@ def bilinear_interpolation_resampling(image_name, scale_factor):
 def average(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
-
-    #    for i in range(0, image.size[0]):
-    #        for j in range(0, image.size[1]):
-    #            if i == 0:
-    #                if j == 0:
-    #                    sum = image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
-    #                    mode = 4
-    #                    print("superior esquerdo")
-    #
-    #                elif j == image.size[1] - 1:
-    #                    sum = image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1))
-    #                    mode = 4
-    #                    print("superior direito")
-    #
-    #                else:
-    #                    sum = image.getpixel((i, j - 1)) + image.getpixel((i, j)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j - 1)) + image.getpixel((i + 1, j)) + image.getpixel((i + 1, j + 1))
-    #                    mode = 6
-    #                    print("superior")
-    #
-    #            elif i == image.size[0] - 1:
-    #                if j == 0:
-    #                    sum = image.getpixel((i, j)) + image.getpixel((i - 1, j)) + image.getpixel((i, j + 1)) + image.getpixel((i - 1, j + 1))
-    #                    mode = 4
-    #                    print("inferior esquerdo")
-    #
-    #                elif j == image.size[1] - 1:
-    #                    sum = image.getpixel((i, j)) + image.getpixel((i - 1, j)) + image.getpixel((i, j - 1)) + image.getpixel((i - 1, j - 1))
-    #                    mode = 4
-    #                    print("inferior direito")
-    #
-    #                else:
-    #                    sum = image.getpixel((i, j - 1)) + image.getpixel((i, j)) + image.getpixel((i, j + 1)) + image.getpixel((i - 1, j - 1)) + image.getpixel((i - 1, j)) + image.getpixel((i - 1, j + 1))
-    #                    mode = 6
-    #                    print("inferior")
-    #
-    #            elif j == 0:
-    #                sum = image.getpixel((i - 1, j)) + image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i - 1, j + 1)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
-    #                mode = 6
-    #                print("esquerdo")
-    #
-    #            elif j == image.size[1] - 1:
-    #                sum = image.getpixel((i - 1, j)) + image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i - 1, j - 1)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1))
-    #                mode = 6
-    #                print("direito")
-    #
-    #            else:
-    #                sum = image.getpixel((i - 1, j)) + image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i - 1, j - 1)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1)) + image.getpixel((i - 1, j + 1)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
-    #                mode = 9
-
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
             mask = mask_intern(image, i, j)
@@ -419,3 +370,29 @@ def mask_intern(image, i, j):
         mode = 9
 
     return [sum, mode]
+
+
+def laplace(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    #hiperboost = True
+    hiperboost = False
+
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
+            mask = mask_intern(image, i, j)
+
+
+            sum = mask[0] - image.getpixel((i, j))
+            mode = 8
+            if hiperboost == True:
+                mode = mode + 1
+
+            output_pixel = (mode * image.getpixel((i, j))) - sum
+            if (i == 0) or (j == 0) or (i == image.size[0] - 1) or (j == image.size[1] - 1):
+                output_pixel = 0
+
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+
