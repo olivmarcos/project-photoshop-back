@@ -24,14 +24,19 @@ def allowed_filter(filter):
     return filter in ALLOWED_FILTERS
 
 
-def execute(filter, image_name, second_image_name, gamma, aValue, bValue, scale_factor):
+def execute(
+    filter,
+    image_name,
+    second_image_name=None,
+    gamma=None,
+    aValue=None,
+    bValue=None,
+    scale_factor=None,
+):
     if not filter or not image_name:
         return False
 
     if not allowed_filter(filter):
-        return False
-
-    if not gamma:
         return False
 
     if filter == "negative":
@@ -42,7 +47,7 @@ def execute(filter, image_name, second_image_name, gamma, aValue, bValue, scale_
         new_image = filters.logarithm(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
-    if filter == "invLogarithm":
+    if filter == "inverse-logarithm":
         new_image = filters.invLogarithm(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
