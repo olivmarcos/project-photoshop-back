@@ -1,6 +1,4 @@
 import os
-
-import flask
 import filters
 
 ALTERED_FOLDER = "./altered"
@@ -21,7 +19,7 @@ ALLOWED_FILTERS = [
     "bilinear-interpolation-resampling",
     "average",
     "horizontal-mirroring",
-    "vertical-mirroring"
+    "vertical-mirroring",
 ]
 
 
@@ -37,6 +35,7 @@ def execute(
     aValue=None,
     bValue=None,
     scale_factor=None,
+    merge_percentage=None,
 ):
     if not filter or not image_name:
         return False
@@ -93,8 +92,12 @@ def execute(
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "add-two-images":
-        #percentage = 25
-        new_image = filters.add_two_images(image_name, second_image_name, gamma)
+        if not merge_percentage:
+            return False
+        
+        new_image = filters.add_two_images(
+            image_name, second_image_name, merge_percentage
+        )
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "nearest-neighbor-resampling":
@@ -104,7 +107,7 @@ def execute(
     if filter == "bilinear-interpolation-resampling":
         new_image = filters.bilinear_interpolation_resampling(image_name, scale_factor)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
-            
+
     if filter == "average":
         new_image = filters.average(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
