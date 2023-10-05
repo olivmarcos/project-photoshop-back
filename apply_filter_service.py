@@ -1,4 +1,6 @@
 import os
+
+import flask
 import filters
 
 ALTERED_FOLDER = "./altered"
@@ -18,6 +20,8 @@ ALLOWED_FILTERS = [
     "nearest-neighbor-resampling",
     "bilinear-interpolation-resampling",
     "average",
+    "horizontal-mirroring",
+    "vertical-mirroring"
 ]
 
 
@@ -25,14 +29,19 @@ def allowed_filter(filter):
     return filter in ALLOWED_FILTERS
 
 
-def execute(filter, image_name, second_image_name, gamma, aValue, bValue, scale_factor):
+def execute(
+    filter,
+    image_name,
+    second_image_name=None,
+    gamma=None,
+    aValue=None,
+    bValue=None,
+    scale_factor=None,
+):
     if not filter or not image_name:
         return False
 
     if not allowed_filter(filter):
-        return False
-
-    if not gamma:
         return False
 
     if filter == "negative":
@@ -43,7 +52,7 @@ def execute(filter, image_name, second_image_name, gamma, aValue, bValue, scale_
         new_image = filters.logarithm(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
-    if filter == "invLogarithm":
+    if filter == "inverse-logarithm":
         new_image = filters.invLogarithm(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
@@ -56,15 +65,23 @@ def execute(filter, image_name, second_image_name, gamma, aValue, bValue, scale_
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "rotation-ninety-degree":
-        new_image = filters.rotation_ninety_degree(image_name, gamma)
+        new_image = filters.rotation_ninety_degree(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "rotation-counterclockwise-ninety-degree":
-        new_image = filters.rotation_counterclockwise_ninety_degree(image_name, gamma)
+        new_image = filters.rotation_counterclockwise_ninety_degree(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "rotation-one-hundred-eighty":
-        new_image = filters.root(image_name, gamma)
+        new_image = filters.rotation_one_hundred_eighty(image_name)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+    if filter == "horizontal-mirroring":
+        new_image = filters.horizontal_mirroring(image_name)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+    if filter == "vertical-mirroring":
+        new_image = filters.vertical_mirroring(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "expansion":

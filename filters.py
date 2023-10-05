@@ -83,6 +83,7 @@ def rotation_ninety_degree(image_name):
         for j in range(0, image.size[1] - 1):
             output_pixel = image.getpixel((image.size[1] - 1 - j, i))
             copy.putpixel((i, j), output_pixel)
+
     return copy
 
 
@@ -94,6 +95,7 @@ def rotation_counterclockwise_ninety_degree(image_name):
         for j in range(0, image.size[1] - 1):
             output_pixel = image.getpixel((j, image.size[0] - 1 - i))
             copy.putpixel((i, j), output_pixel)
+
     return copy
 
 
@@ -101,32 +103,35 @@ def rotation_one_hundred_eighty(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
     
-     for i in range(0, image.size[0] - 1):
+    for i in range(0, image.size[0] - 1):
         for j in range(0, image.size[1] - 1):
             output_pixel = image.getpixel((image.size[0] - 1 - i, image.size[1] - 1 - j))
             copy.putpixel((i, j), output_pixel)
+
     return copy
 
 
-def horizontal_invert(image_name):
+def horizontal_mirroring(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
     
-     for i in range(0, image.size[0] - 1):
+    for i in range(0, image.size[0] - 1):
         for j in range(0, image.size[1] - 1):
             output_pixel = image.getpixel((image.size[0] - 1 - i, j))
             copy.putpixel((i, j), output_pixel)
+
     return copy
 
 
-def vertical_invert(image_name):
+def vertical_mirroring(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
     
-     for i in range(0, image.size[0] - 1):
+    for i in range(0, image.size[0] - 1):
         for j in range(0, image.size[1] - 1):
             output_pixel = image.getpixel((i, image.size[1] - 1 - j))
             copy.putpixel((i, j), output_pixel)
+
     return copy
 
 def expansion(image_name, aValue, bValue):
@@ -140,6 +145,7 @@ def expansion(image_name, aValue, bValue):
             original_pixel = image.getpixel((i, j))
             output_pixel = int(a * original_pixel + b)
             copy.putpixel((i, j), output_pixel)
+
     return copy
 
 def compression(image_name, aValue, bValue):
@@ -153,6 +159,7 @@ def compression(image_name, aValue, bValue):
             original_pixel = image.getpixel((i, j))
             output_pixel = int((original_pixel / a) - b)
             copy.putpixel((i, j), output_pixel)
+
     return copy
 
 def add_two_images(image_name, second_image_name, gamma): #trocar o gamma por percentage
@@ -165,13 +172,13 @@ def add_two_images(image_name, second_image_name, gamma): #trocar o gamma por pe
     a = gamma
     b = 100 - gamma
 
-
     for i in range(0, image.size[0] - 1):
         for j in range(0, image.size[1] - 1):
             percentage_original_pixel =        int(a * (image.getpixel((i, j)) / 100))
             percentage_second_original_pixel = int(b * (secondImage.getpixel((i, j)) / 100))
             output_pixel = int(percentage_original_pixel + percentage_second_original_pixel)
             copy.putpixel((i, j), output_pixel)
+            
     return copy
 
 
