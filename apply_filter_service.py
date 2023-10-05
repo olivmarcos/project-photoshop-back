@@ -17,6 +17,7 @@ ALLOWED_FILTERS = [
     "add-two-images",
     "nearest-neighbor-resampling",
     "bilinear-interpolation-resampling",
+    "average",
 ]
 
 
@@ -80,8 +81,8 @@ def execute(
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "add-two-images":
-        percentage = 25
-        new_image = filters.add_two_images(image_name, second_image_name, percentage)
+        #percentage = 25
+        new_image = filters.add_two_images(image_name, second_image_name, gamma)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "nearest-neighbor-resampling":
@@ -90,6 +91,10 @@ def execute(
 
     if filter == "bilinear-interpolation-resampling":
         new_image = filters.bilinear_interpolation_resampling(image_name, scale_factor)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+            
+    if filter == "average":
+        new_image = filters.average(image_name)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     return image_name

@@ -75,48 +75,103 @@ def root(image_name, gamma):
     return copy
 
 
-def rotation_ninety_degree(image_name, gamma):
+def rotation_ninety_degree(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
-    # TO-DO
+
+    for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((image.size[1] - 1 - j, i))
+            copy.putpixel((i, j), output_pixel)
     return copy
 
 
-def rotation_counterclockwise_ninety_degree(image_name, gamma):
+def rotation_counterclockwise_ninety_degree(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
-    # TO-DO
+
+    for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((j, image.size[0] - 1 - i))
+            copy.putpixel((i, j), output_pixel)
     return copy
 
 
-def rotation_one_hundred_eighty(image_name, gamma):
+def rotation_one_hundred_eighty(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
-    # TO-DO
+    
+     for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((image.size[0] - 1 - i, image.size[1] - 1 - j))
+            copy.putpixel((i, j), output_pixel)
     return copy
 
+
+def horizontal_invert(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    
+     for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((image.size[0] - 1 - i, j))
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+
+def vertical_invert(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    
+     for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            output_pixel = image.getpixel((i, image.size[1] - 1 - j))
+            copy.putpixel((i, j), output_pixel)
+    return copy
 
 def expansion(image_name, aValue, bValue):
     image = image_service.get_image(image_name)
     copy = image.copy()
-    # TO-DO
-    return copy
+    a = aValue
+    b = bValue
 
+    for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            original_pixel = image.getpixel((i, j))
+            output_pixel = int(a * original_pixel + b)
+            copy.putpixel((i, j), output_pixel)
+    return copy
 
 def compression(image_name, aValue, bValue):
     image = image_service.get_image(image_name)
     copy = image.copy()
-    # TO-DO
+    a = aValue
+    b = bValue
+
+    for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            original_pixel = image.getpixel((i, j))
+            output_pixel = int((original_pixel / a) - b)
+            copy.putpixel((i, j), output_pixel)
     return copy
 
-
-def add_two_images(image_name, second_image_name, percentage):
+def add_two_images(image_name, second_image_name, gamma): #trocar o gamma por percentage
     image = image_service.get_image(image_name)
     copy = image.copy()
 
     secondImage = image_service.get_image(second_image_name)
-    secondCopy = secondImage.copy()
-    # TO-DO
+    #secondCopy = secondImage.copy()
+
+    a = gamma
+    b = 100 - gamma
+
+
+    for i in range(0, image.size[0] - 1):
+        for j in range(0, image.size[1] - 1):
+            percentage_original_pixel =        int(a * (image.getpixel((i, j)) / 100))
+            percentage_second_original_pixel = int(b * (secondImage.getpixel((i, j)) / 100))
+            output_pixel = int(percentage_original_pixel + percentage_second_original_pixel)
+            copy.putpixel((i, j), output_pixel)
     return copy
 
 
@@ -179,3 +234,113 @@ def bilinear_interpolation_resampling(image_name, scale_factor):
             elarged_image.putpixel((i, j), interpolated_value)
 
     return elarged_image
+
+def average(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+
+#    for i in range(0, image.size[0]):
+#        for j in range(0, image.size[1]):
+#            if i == 0:
+#                if j == 0:
+#                    sum = image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
+#                    mode = 4
+#                    print("superior esquerdo")
+#
+#                elif j == image.size[1] - 1:
+#                    sum = image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1))
+#                    mode = 4
+#                    print("superior direito")
+#
+#                else:
+#                    sum = image.getpixel((i, j - 1)) + image.getpixel((i, j)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j - 1)) + image.getpixel((i + 1, j)) + image.getpixel((i + 1, j + 1))
+#                    mode = 6
+#                    print("superior")
+#            
+#            elif i == image.size[0] - 1:
+#                if j == 0:
+#                    sum = image.getpixel((i, j)) + image.getpixel((i - 1, j)) + image.getpixel((i, j + 1)) + image.getpixel((i - 1, j + 1))
+#                    mode = 4
+#                    print("inferior esquerdo")
+#
+#                elif j == image.size[1] - 1:
+#                    sum = image.getpixel((i, j)) + image.getpixel((i - 1, j)) + image.getpixel((i, j - 1)) + image.getpixel((i - 1, j - 1))
+#                    mode = 4
+#                    print("inferior direito")
+#
+#                else:
+#                    sum = image.getpixel((i, j - 1)) + image.getpixel((i, j)) + image.getpixel((i, j + 1)) + image.getpixel((i - 1, j - 1)) + image.getpixel((i - 1, j)) + image.getpixel((i - 1, j + 1))
+#                    mode = 6
+#                    print("inferior")
+#            
+#            elif j == 0:
+#                sum = image.getpixel((i - 1, j)) + image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i - 1, j + 1)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
+#                mode = 6
+#                print("esquerdo")
+#
+#            elif j == image.size[1] - 1:
+#                sum = image.getpixel((i - 1, j)) + image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i - 1, j - 1)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1))
+#                mode = 6
+#                print("direito")
+#
+#            else: 
+#                sum = image.getpixel((i - 1, j)) + image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i - 1, j - 1)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1)) + image.getpixel((i - 1, j + 1)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
+#                mode = 9
+    
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):        
+            mask = mask_intern(image, i,j)
+            sum = mask[0]
+            mode = mask[1]
+            avg = sum/mode
+            output_pixel = int(np.round(avg))
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+def mask_intern(image, i, j):
+
+#    for i in range(0, image.size[0]):
+#        for j in range(0, image.size[1]):
+    if i == 0:
+        if j == 0:
+            sum = image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
+            mode = 4
+            print("superior esquerdo")
+        elif j == image.size[1] - 1:
+            sum = image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1))
+            mode = 4
+            print("superior direito")
+        else:
+            sum = image.getpixel((i, j - 1)) + image.getpixel((i, j)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j - 1)) + image.getpixel((i + 1, j)) + image.getpixel((i + 1, j + 1))
+            mode = 6
+            print("superior")
+    
+    elif i == image.size[0] - 1:
+        if j == 0:
+            sum = image.getpixel((i, j)) + image.getpixel((i - 1, j)) + image.getpixel((i, j + 1)) + image.getpixel((i - 1, j + 1))
+            mode = 4
+            print("inferior esquerdo")
+        elif j == image.size[1] - 1:
+            sum = image.getpixel((i, j)) + image.getpixel((i - 1, j)) + image.getpixel((i, j - 1)) + image.getpixel((i - 1, j - 1))
+            mode = 4
+            print("inferior direito")
+        else:
+            sum = image.getpixel((i, j - 1)) + image.getpixel((i, j)) + image.getpixel((i, j + 1)) + image.getpixel((i - 1, j - 1)) + image.getpixel((i - 1, j)) + image.getpixel((i - 1, j + 1))
+            mode = 6
+            print("inferior")
+    
+    elif j == 0:
+        sum = image.getpixel((i - 1, j)) + image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i - 1, j + 1)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
+        mode = 6
+        print("esquerdo")
+    elif j == image.size[1] - 1:
+        sum = image.getpixel((i - 1, j)) + image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i - 1, j - 1)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1))
+        mode = 6
+        print("direito")
+    else: 
+        sum = image.getpixel((i - 1, j)) + image.getpixel((i, j)) + image.getpixel((i + 1, j)) + image.getpixel((i - 1, j - 1)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1)) + image.getpixel((i - 1, j + 1)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
+        mode = 9
+    
+    return [sum, mode]
+    
+
