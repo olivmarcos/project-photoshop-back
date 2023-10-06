@@ -20,7 +20,8 @@ ALLOWED_FILTERS = [
     "average",
     "horizontal-mirroring",
     "vertical-mirroring",
-    "laplace"
+    "laplace",
+    "prewitt_sobel"
 ]
 
 
@@ -37,7 +38,8 @@ def execute(
     bValue,
     scale_factor,
     merge_percentage,
-    hiperboost: bool
+    hiperboost: bool,
+    sobel: bool
 ):
     if not filter or not image_name:
         return False
@@ -116,6 +118,10 @@ def execute(
 
     if filter == "laplace":
         new_image = filters.laplace(image_name, hiperboost)
+        new_image.save(os.path.join(ALTERED_FOLDER, image_name))
+
+    if filter == "prewitt_sobel":
+        new_image = filters.prewitt_sobel(image_name, sobel)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     return image_name

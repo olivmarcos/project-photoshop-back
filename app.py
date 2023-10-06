@@ -56,6 +56,7 @@ def apply_negative_effect():
     scale_factor = data.get("scaleFactor")
     merge_percentage = data.get("mergePercentage")
     hiperboost = data.get("hiperboost")
+    sobel = data.get("sobel")
 
     new_file = apply_filter_service.execute(
         filter_to_apply,
@@ -67,6 +68,7 @@ def apply_negative_effect():
         scale_factor,
         merge_percentage,
         hiperboost,
+        sobel,
     )
 
     return jsonify({"message": "File altered successfully", "file_name": new_file})
