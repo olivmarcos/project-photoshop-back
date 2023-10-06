@@ -31,12 +31,13 @@ def allowed_filter(filter):
 def execute(
     filter,
     image_name,
-    second_image_name=None,
-    gamma=None,
-    aValue=None,
-    bValue=None,
-    scale_factor=None,
-    merge_percentage=None,
+    second_image_name,
+    gamma,
+    aValue,
+    bValue,
+    scale_factor,
+    merge_percentage,
+    hiperboost: bool
 ):
     if not filter or not image_name:
         return False
@@ -114,7 +115,7 @@ def execute(
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     if filter == "laplace":
-        new_image = filters.laplace(image_name)
+        new_image = filters.laplace(image_name, hiperboost)
         new_image.save(os.path.join(ALTERED_FOLDER, image_name))
 
     return image_name
