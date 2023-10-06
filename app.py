@@ -1,4 +1,3 @@
-from fileinput import filename
 from flask import Flask, flash, request, jsonify, send_from_directory
 from flask_cors import CORS
 
@@ -67,7 +66,7 @@ def apply_negative_effect():
         bValue,
         scale_factor,
         merge_percentage,
-        hiperboost
+        hiperboost,
     )
 
     return jsonify({"message": "File altered successfully", "file_name": new_file})

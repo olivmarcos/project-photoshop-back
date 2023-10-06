@@ -17,9 +17,6 @@ def negative(image_name):
 
     return copy
 
-
-# caso queira botar uma area para o usuario informar o valor da contante,me informe que eu ajusto, o Sergio achoq ue disse que o valor padrão era 105.886  mas vou confirmar com ele hj
-# eu tbm n sei acho que vai precisar importar o numpy pra mexer com contas eu n sei se vc tem ele . . .  deve ter . . .
 def logarithm(image_name):
     image = image_service.get_image(image_name)
     c = 255 / np.log(256)
