@@ -167,7 +167,6 @@ def compression(image_name, aValue, bValue):
 
 
 def add_two_images(image_name: str, second_image_name: str, merge_percentage=int):
-    print(merge_percentage)
     image = image_service.get_image(image_name)
     copy = image.copy()
 
@@ -363,7 +362,6 @@ def mask_intern(image, i, j):
 def laplace(image_name: str, hiperboost: bool):
     image = image_service.get_image(image_name)
     copy = image.copy()
-    print(hiperboost)
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
             mask = mask_intern(image, i, j)

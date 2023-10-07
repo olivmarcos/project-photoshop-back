@@ -23,6 +23,7 @@ def execute(image_name: str) -> None:
     equalized_img = equalized_img.astype(np.uint8)
 
     equalized_img = image_service.create_from_array(equalized_img, 'L')
+    image_name = "equalized_" + image_name
     equalized_img.save(os.path.join(EQUALIZED_IMAGES_FOLDER, image_name))
 
     return image_name
