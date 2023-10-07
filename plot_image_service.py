@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import os
 
 
-HISTOGRAMS_FOLDER = "./histograms"
+IMAGES_HISTOGRAMS_FOLDER = "./images_histograms"
 
 
 def execute(image_name: str, histogram: list) -> str:
@@ -15,6 +15,6 @@ def execute(image_name: str, histogram: list) -> str:
     plt.title("Histograma - Imagens em escala de cinza")
 
     file_name = os.path.splitext(image_name)[0] + ".png"
-    plt.savefig(HISTOGRAMS_FOLDER + "/" + file_name)
+    plt.savefig(IMAGES_HISTOGRAMS_FOLDER + "/" + file_name)
 
     return file_name

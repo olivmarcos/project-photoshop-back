@@ -2,8 +2,6 @@ import numpy as np
 from PIL import Image
 import image_service
 
-UPLOAD_FOLDER = "./uploads"
-
 
 def negative(image_name):
     image = image_service.get_image(image_name)
@@ -16,6 +14,7 @@ def negative(image_name):
             copy.putpixel((i, j), output_pixel)
 
     return copy
+
 
 def logarithm(image_name):
     image = image_service.get_image(image_name)
@@ -387,7 +386,7 @@ def laplace(image_name: str, hiperboost: bool):
     return copy
 
 
-def prewitt_sobel(image_name: str, sobel: bool): #add sobel boolean
+def prewitt_sobel(image_name: str, sobel: bool):  # add sobel boolean
     image = image_service.get_image(image_name)
     copy = image.copy()
 
@@ -401,21 +400,41 @@ def prewitt_sobel(image_name: str, sobel: bool): #add sobel boolean
             ):
                 output_pixel = 0
             else:
-                
-                horizontal_negativo = image.getpixel((i - 1, j - 1)) + image.getpixel((i, j - 1)) + image.getpixel((i + 1, j - 1))
-                horizontal_positivo = image.getpixel((i - 1, j + 1)) + image.getpixel((i, j + 1)) + image.getpixel((i + 1, j + 1))
+                horizontal_negativo = (
+                    image.getpixel((i - 1, j - 1))
+                    + image.getpixel((i, j - 1))
+                    + image.getpixel((i + 1, j - 1))
+                )
+                horizontal_positivo = (
+                    image.getpixel((i - 1, j + 1))
+                    + image.getpixel((i, j + 1))
+                    + image.getpixel((i + 1, j + 1))
+                )
 
-                vertical_negativo   = image.getpixel((i - 1, j - 1)) + image.getpixel((i - 1, j)) + image.getpixel((i - 1, j + 1))
-                vertical_positivo   = image.getpixel((i + 1, j - 1)) + image.getpixel((i + 1, j)) + image.getpixel((i + 1, j + 1))
+                vertical_negativo = (
+                    image.getpixel((i - 1, j - 1))
+                    + image.getpixel((i - 1, j))
+                    + image.getpixel((i - 1, j + 1))
+                )
+                vertical_positivo = (
+                    image.getpixel((i + 1, j - 1))
+                    + image.getpixel((i + 1, j))
+                    + image.getpixel((i + 1, j + 1))
+                )
 
                 if sobel is True:
-                    horizontal_negativo = horizontal_negativo + image.getpixel((i, j - 1))
-                    horizontal_positivo = horizontal_positivo + image.getpixel((i, j + 1))
-                    vertical_negativo   = vertical_negativo   + image.getpixel((i - 1, j))
-                    vertical_positivo   = vertical_positivo   + image.getpixel((i + 1, j))
-                
+                    horizontal_negativo = horizontal_negativo + image.getpixel(
+                        (i, j - 1)
+                    )
+                    horizontal_positivo = horizontal_positivo + image.getpixel(
+                        (i, j + 1)
+                    )
+                    vertical_negativo = vertical_negativo + image.getpixel((i - 1, j))
+                    vertical_positivo = vertical_positivo + image.getpixel((i + 1, j))
 
-                output_pixel = abs(horizontal_positivo - horizontal_negativo) + abs(vertical_positivo - vertical_negativo)
+                output_pixel = abs(horizontal_positivo - horizontal_negativo) + abs(
+                    vertical_positivo - vertical_negativo
+                )
 
             copy.putpixel((i, j), output_pixel)
     return copy

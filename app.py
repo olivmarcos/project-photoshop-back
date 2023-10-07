@@ -8,16 +8,16 @@ import equalize_image
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = "uploads"
-app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
+UPLOADED_IMAGES_FOLDER = "uploaded_images"
+app.config["UPLOADED_IMAGES_FOLDER"] = UPLOADED_IMAGES_FOLDER
 
-ALTERED_FOLDER = "altered"
-app.config["ALTERED_FOLDER"] = ALTERED_FOLDER
+FILTERED_IMAGES_FOLDER = "filtered_images"
+app.config["FILTERED_IMAGES_FOLDER"] = FILTERED_IMAGES_FOLDER
 
-HISTOGRAMS_FOLDER = "histograms"
-app.config["HISTOGRAMS_FOLDER"] = HISTOGRAMS_FOLDER
+IMAGES_HISTOGRAMS_FOLDER = "images_histograms"
+app.config["IMAGES_HISTOGRAMS_FOLDER"] = IMAGES_HISTOGRAMS_FOLDER
 
-EQUALIZED_IMAGES_FOLDER = 'equalized_images'
+EQUALIZED_IMAGES_FOLDER = "equalized_images"
 app.config["EQUALIZED_IMAGES_FOLDER"] = EQUALIZED_IMAGES_FOLDER
 
 allowed_origins = ["http://localhost:5173"]
@@ -29,7 +29,7 @@ def hello_world():
     return "<p>Hello, World!</p>"
 
 
-@app.route("/api/v1/upload", methods=["POST"])
+@app.route("/api/v1/images/upload", methods=["POST"])
 def upload():
     if "file" not in request.files:
         flash("no file part")
@@ -47,7 +47,12 @@ def upload():
     return jsonify({"message": "File uploaded successfully", "file_name": file_name})
 
 
-@app.route("/api/v1/filter", methods=["POST"])
+@app.route("/api/v1/images/uploaded/<file_name>", methods=["GET"])
+def uploaded_file(file_name):
+    return send_from_directory(app.config["UPLOADED_IMAGES_FOLDER"], file_name)
+
+
+@app.route("/api/v1/images/filter", methods=["POST"])
 def apply_negative_effect():
     data = request.get_json()
 
@@ -78,17 +83,12 @@ def apply_negative_effect():
     return jsonify({"message": "File altered successfully", "file_name": new_file})
 
 
-@app.route("/api/v1/uploads/<file_name>", methods=["GET"])
-def uploaded_file(file_name):
-    return send_from_directory(app.config["UPLOAD_FOLDER"], file_name)
-
-
-@app.route("/api/v1/altered/<file_name>", methods=["GET"])
+@app.route("/api/v1/images/filtered/<file_name>", methods=["GET"])
 def altered_file(file_name):
-    return send_from_directory(app.config["ALTERED_FOLDER"], file_name)
+    return send_from_directory(app.config["FILTERED_IMAGES_FOLDER"], file_name)
 
 
-@app.route("/api/v1/histogram", methods=["POST"])
+@app.route("/api/v1/images/histogram", methods=["POST"])
 def create_histogram():
     data = request.get_json()
     file_name = data.get("fileName")
@@ -103,9 +103,9 @@ def create_histogram():
     )
 
 
-@app.route("/api/v1/histogram/<file_name>", methods=["GET"])
+@app.route("/api/v1/images/histogram/<file_name>", methods=["GET"])
 def get_histogram(file_name):
-    return send_from_directory(app.config["HISTOGRAMS_FOLDER"], file_name)
+    return send_from_directory(app.config["IMAGES_HISTOGRAMS_FOLDER"], file_name)
 
 
 @app.route("/api/v1/images/equalize", methods=["POST"])
@@ -123,9 +123,10 @@ def image_equalization():
     )
 
 
-@app.route("/api/v1/images/equalize/<file_name>", methods=["GET"])
+@app.route("/api/v1/images/equalized/<file_name>", methods=["GET"])
 def get_equali(file_name):
     return send_from_directory(app.config["EQUALIZED_IMAGES_FOLDER"], file_name)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
