@@ -85,7 +85,12 @@ def apply_negative_effect():
         sobel,
     )
 
-    return jsonify({"message": "File altered successfully", "file_name": new_file})
+    return jsonify(
+        {
+            "message": "filter applied successfully",
+            "data": {"fileName": new_file},
+        }
+    )
 
 
 @app.route("/api/v1/images/filtered/<file_name>", methods=["GET"])
@@ -98,6 +103,7 @@ def create_histogram():
     data = request.get_json()
     file_name = data.get("fileName")
     location = data.get("from")
+
     histogram_file_name = generate_histogram.execute(file_name, location)
 
     return jsonify(
