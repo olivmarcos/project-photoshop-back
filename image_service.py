@@ -15,10 +15,15 @@ def get_image(image_name: str) -> Image:
 
     return image
 
+
+def create_from_array(image_values: list, mode: str) -> Image:
+    return Image.fromarray(image_values, mode)
+
+
 def get_image_histogram(image: Image) -> list:
     if not image:
         return False
-    
+
     height = image.size[0] - 1
     width = image.size[1] - 1
 
@@ -26,6 +31,6 @@ def get_image_histogram(image: Image) -> list:
 
     for x in range(0, height):
         for y in range(0, width):
-            histogram[image.getpixel((y, x))] += 1 
+            histogram[image.getpixel((y, x))] += 1
 
     return histogram

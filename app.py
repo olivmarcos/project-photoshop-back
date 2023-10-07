@@ -4,6 +4,7 @@ from flask_cors import CORS
 import upload_file_service
 import apply_filter_service
 import generate_histogram
+import equalize_image
 
 app = Flask(__name__)
 
@@ -15,6 +16,9 @@ app.config["ALTERED_FOLDER"] = ALTERED_FOLDER
 
 HISTOGRAMS_FOLDER = "histograms"
 app.config["HISTOGRAMS_FOLDER"] = HISTOGRAMS_FOLDER
+
+EQUALIZED_IMAGES_FOLDER = 'equalized_images'
+app.config["EQUALIZED_IMAGES_FOLDER"] = EQUALIZED_IMAGES_FOLDER
 
 allowed_origins = ["http://localhost:5173"]
 CORS(app, resources={r"/api/*": {"origins": allowed_origins}})
@@ -103,6 +107,25 @@ def create_histogram():
 def get_histogram(file_name):
     return send_from_directory(app.config["HISTOGRAMS_FOLDER"], file_name)
 
+
+@app.route("/api/v1/images/equalize", methods=["POST"])
+def image_equalization():
+    data = request.get_json()
+    file_name = data.get("fileName")
+
+    equalized_image = equalize_image.execute(file_name)
+
+    return jsonify(
+        {
+            "message": "Generated image equalization succesfully",
+            "data": {"fileName": equalized_image},
+        }
+    )
+
+
+@app.route("/api/v1/images/equalize/<file_name>", methods=["GET"])
+def get_equali(file_name):
+    return send_from_directory(app.config["EQUALIZED_IMAGES_FOLDER"], file_name)
 
 if __name__ == "__main__":
     app.run(debug=True)

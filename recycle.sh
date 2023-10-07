@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # List of directories to clean up
-directories=("uploads" "altered" "histograms")
+directories=("uploads" "altered" "histograms" "equalizeds")
 
 for directory in "${directories[@]}"; do
     if [ -d "$directory" ]; then

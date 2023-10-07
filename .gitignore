@@ -9,3 +9,6 @@ altered/*
 
 histograms/*
 !histograms/.gitkeep
+
+equalized_images/*
+!equalized_images/.gitkeep
