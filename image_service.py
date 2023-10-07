@@ -1,14 +1,17 @@
 from PIL import Image
 import numpy as np
 
-UPLOADED_IMAGES_FOLDER = "./uploaded_images"
+UPLOADED_IMAGES_FOLDER = "uploaded_images"
 
 
-def get_image(image_name: str) -> Image:
+def get_image(image_name: str, location: str = UPLOADED_IMAGES_FOLDER) -> Image:
     if not image_name:
         return False
+    
+    if location:
+        print(location)
 
-    image = Image.open(UPLOADED_IMAGES_FOLDER + "/" + image_name)
+    image = Image.open(location + "/" + image_name)
 
     if image.mode != "L":
         image = image.convert("L")

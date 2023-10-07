@@ -44,7 +44,12 @@ def upload():
     if not file_name:
         return jsonify({"error": "Invalid file format"})
 
-    return jsonify({"message": "File uploaded successfully", "file_name": file_name})
+    return jsonify(
+        {
+            "message": "Generated image equalization succesfully",
+            "data": {"fileName": file_name},
+        }
+    )
 
 
 @app.route("/api/v1/images/uploaded/<file_name>", methods=["GET"])
@@ -92,8 +97,8 @@ def altered_file(file_name):
 def create_histogram():
     data = request.get_json()
     file_name = data.get("fileName")
-
-    histogram_file_name = generate_histogram.execute(file_name)
+    location = data.get("from")
+    histogram_file_name = generate_histogram.execute(file_name, location)
 
     return jsonify(
         {
