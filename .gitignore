@@ -1,11 +1,14 @@
 .venv
 __pycache__
 
-uploads/*
-!uploads/.gitkeep
+uploaded_images/*
+!uploaded_images/.gitkeep
 
-altered/*
-!altered/.gitkeep
+filtered_images/*
+!filtered_images/.gitkeep
 
-histograms/*
-!histograms/.gitkeep
+images_histograms/*
+!images_histograms/.gitkeep
+
+equalized_images/*
+!equalized_images/.gitkeep
