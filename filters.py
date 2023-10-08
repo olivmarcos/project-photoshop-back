@@ -431,3 +431,32 @@ def prewitt_sobel(image_name: str, sobel: bool):
 
             copy.putpixel((i, j), output_pixel)
     return copy
+
+def min(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
+            mask = mask_intern(image, i, j)
+            Max = mask[0]
+            for x in mask:
+                if x > Max:
+                    Max = x
+            output_pixel = Max
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+
+def max(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
+            mask = mask_intern(image, i, j)
+            Min  = mask[0]
+            for x in mask:
+                if x < Min:
+                    Max = x
+            output_pixel = Min
+            copy.putpixel((i, j), output_pixel)
+    return copy
