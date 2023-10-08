@@ -253,12 +253,12 @@ def bilinear_interpolation_resampling(image_name, scale_factor):
     return elarged_image
 
 
-def mean(image_name): #, mask_size
+def mean(image_name, mask_size):
     image = image_service.get_image(image_name)
     copy = image.copy()
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j) #, mask_size
+            mask = mask_intern(image, i, j, mask_size) 
             sum = np.sum(mask[0])
             mode = mask[1]
             avg = sum / mode
@@ -266,69 +266,91 @@ def mean(image_name): #, mask_size
             copy.putpixel((i, j), output_pixel)
     return copy
 
-def mask_intern(image, i, j): #, mask_size
-    tam = 3
+def mask_intern(image, i, j, mask_size): 
+    tam = mask_size
     pixels= []
+    iteracoes = 0
     delta_center = int((tam - 1) / 2)
+
+    if (i + delta_center + 1) > image.size[0] - 1:
+        loopXMax = image.size[0] - 1
+    else:
+        loopXMax = i + delta_center + 1
+
+    if (i - delta_center) < 0:
+        loopXMin = 0
+    else:
+        loopXMin = i - delta_center
+
+    if (j + delta_center + 1) > image.size[0] - 1:
+        loopYMax = image.size[1] - 1
+    else:
+        loopYMax = j + delta_center + 1
+
+    if (j - delta_center) < 0:
+        loopYMin = 0
+    else:
+        loopYMin = j - delta_center
+        
     if i == 0:
         if j == 0:
-            for x in range(i, i + delta_center + 1):
-                for y in range(j, j + delta_center + 1):
+            for x in range(i, loopXMax):
+                for y in range(j, loopYMax):
+                    iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
             
-            mode = 4
         elif j == image.size[1] - 1:
-            for x in range(i, i + delta_center + 1):
-                for y in range(j - delta_center, j + 1):
+            for x in range(i, loopXMax):
+                for y in range(loopYMin, j + 1):
+                    iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
             
-            mode = 4
         else:
-            for x in range(i, i + delta_center + 1):
-                for y in range(j - delta_center, j + delta_center + 1):
+            for x in range(i, loopXMax):
+                for y in range(loopYMin, loopYMax):
+                    iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
 
-            mode = 6
 
     elif i == image.size[0] - 1:
         if j == 0:
-            for x in range(i - delta_center, i + 1):
-                for y in range(j, j + delta_center + 1):
+            for x in range(loopXMin, i + 1):
+                for y in range(j, loopYMax):
+                    iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
             
-            mode = 4
         elif j == image.size[1] - 1:
-            for x in range(i - delta_center, i + 1):
-                for y in range(j - delta_center, j + 1):
+            for x in range(loopXMin, i + 1):
+                for y in range(loopYMin, j + 1):
+                    iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
             
-            mode = 4
         else:
-            for x in range(i - delta_center, i + 1):
-                for y in range(j - delta_center, j + delta_center + 1):
+            for x in range(loopXMin, i + 1):
+                for y in range(loopYMin, loopYMax):
+                    iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
             
-            mode = 6
 
     elif j == 0:
-        for x in range(i - delta_center, i + delta_center + 1):
-            for y in range(j, j + delta_center + 1):
+        for x in range(loopXMin, loopXMax):
+            for y in range(j, loopYMax):
+                iteracoes = iteracoes + 1
                 pixels.append(image.getpixel((x, y)))
         
-        mode = 6
     elif j == image.size[1] - 1:
-        for x in range(i - delta_center, i + delta_center + 1):
-            for y in range(j - delta_center, j + 1):
+        for x in range(loopXMin, loopXMax):
+            for y in range(loopYMin, j + 1):
+                iteracoes = iteracoes + 1
                 pixels.append(image.getpixel((x, y)))
         
-        mode = 6
     else:
-        for x in range(i - delta_center, i + delta_center + 1):
-            for y in range(j - delta_center, j + delta_center + 1):
+        for x in range(loopXMin, loopXMax):
+            for y in range(loopYMin, loopYMax):
+                iteracoes = iteracoes + 1
                 pixels.append(image.getpixel((x, y)))
         
-        mode = 9
-
+    mode = iteracoes
     return [pixels, mode]
 
 
@@ -357,7 +379,7 @@ def laplace(image_name: str, hiperboost: bool):
     return copy
 
 
-def prewitt_sobel(image_name: str, sobel: bool):  # add sobel boolean
+def prewitt_sobel(image_name: str, sobel: bool):  
     image = image_service.get_image(image_name)
     copy = image.copy()
 

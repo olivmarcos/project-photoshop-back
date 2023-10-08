@@ -28,7 +28,6 @@ ALLOWED_FILTERS = [
 def allowed_filter(filter):
     return filter in ALLOWED_FILTERS
 
-
 def execute(
     filter,
     image_name,
@@ -39,7 +38,8 @@ def execute(
     scale_factor,
     merge_percentage,
     hiperboost: bool,
-    sobel: bool
+    sobel: bool,
+    mask_size
 ):
     if not filter or not image_name:
         return False
@@ -113,7 +113,7 @@ def execute(
         new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
 
     if filter == "mean":
-        new_image = filters.mean(image_name)
+        new_image = filters.mean(image_name, mask_size)
         new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
 
     if filter == "laplace":
