@@ -18,6 +18,8 @@ ALLOWED_FILTERS = [
     "nearest-neighbor-resampling",
     "bilinear-interpolation-resampling",
     "mean",
+    "mode",
+    "median",
     "horizontal-mirroring",
     "vertical-mirroring",
     "laplace",
@@ -25,7 +27,7 @@ ALLOWED_FILTERS = [
 ]
 
 
-def allowed_filter(filter):
+def allowed_filters(filter):
     return filter in ALLOWED_FILTERS
 
 def execute(
@@ -44,7 +46,7 @@ def execute(
     if not filter or not image_name:
         return False
 
-    if not allowed_filter(filter):
+    if not allowed_filters(filter):
         return False
 
     if filter == "negative":
@@ -111,6 +113,14 @@ def execute(
 
     if filter == "mean":
         new_image = filters.mean(image_name, mask_size)
+        new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
+
+    if filter == "median":
+        new_image = filters.median(image_name, mask_size)
+        new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
+
+    if filter == "mode":
+        new_image = filters.mode(image_name, mask_size)
         new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
 
     if filter == "laplace":

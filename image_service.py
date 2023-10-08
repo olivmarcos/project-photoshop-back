@@ -7,9 +7,6 @@ UPLOADED_IMAGES_FOLDER = "uploaded_images"
 def get_image(image_name: str, location: str = UPLOADED_IMAGES_FOLDER) -> Image:
     if not image_name:
         return False
-    
-    if location:
-        print(location)
 
     image = Image.open(location + "/" + image_name)
 

@@ -253,19 +253,6 @@ def bilinear_interpolation_resampling(image_name, scale_factor):
     return elarged_image
 
 
-def mean(image_name, mask_size):
-    image = image_service.get_image(image_name)
-    copy = image.copy()
-    for i in range(0, image.size[0]):
-        for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j, mask_size) 
-            sum = np.sum(mask[0])
-            mode = mask[1]
-            avg = sum / mode
-            output_pixel = int(np.round(avg))
-            copy.putpixel((i, j), output_pixel)
-    return copy
-
 def mask_intern(image, i, j, mask_size): 
     tam = mask_size
     pixels= []
@@ -460,3 +447,72 @@ def min_filter(image_name):
             output_pixel = Min
             copy.putpixel((i, j), output_pixel)
     return copy
+
+def mean(image_name, mask_size):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
+            mask = mask_intern(image, i, j, mask_size) 
+            sum = np.sum(mask[0])
+            mode = mask[1]
+            avg = sum / mode
+            output_pixel = int(np.round(avg))
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+def mode(image_name, mask_size):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
+            mask = mask_intern(image, i, j, mask_size) 
+            selected_pixels = mask[0]
+            output_pixel = find_mode(selected_pixels)
+            if not output_pixel:
+                output_pixel = image.getpixel((i, j))
+
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+def find_mode(data):
+    num_count = {}
+
+    for num in data:
+        if num in num_count:
+            num_count[num] += 1
+        else:
+            num_count[num] = 1
+
+    max_count = max(num_count.values())
+
+    modes = [num for num, count in num_count.items() if count == max_count]
+
+    if len(modes) == 1:
+        return modes[0]
+    else:
+        return None
+
+def median(image_name, mask_size):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
+            mask = mask_intern(image, i, j, mask_size) 
+            selected_pixels = mask[0]
+            median_pixel = calculate_median(selected_pixels)
+            output_pixel = int(np.round(median_pixel))
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+def calculate_median(numbers):
+    sorted_numbers = sorted(numbers)
+
+    middle = len(sorted_numbers) // 2
+
+    if len(sorted_numbers) % 2 == 0:
+        median = (sorted_numbers[middle - 1] + sorted_numbers[middle]) / 2
+    else:
+        median = sorted_numbers[middle]
+
+    return median
