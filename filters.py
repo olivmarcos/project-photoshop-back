@@ -359,7 +359,7 @@ def laplace(image_name: str, hiperboost: bool):
     copy = image.copy()
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j)
+            mask = mask_intern(image, i, j, 3) 
 
             sum = np.sum(mask[0]) - image.getpixel((i, j))
             mode = 8
