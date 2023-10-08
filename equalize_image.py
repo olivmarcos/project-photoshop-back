@@ -4,11 +4,11 @@ import image_service
 
 EQUALIZED_IMAGES_FOLDER = './equalized_images'
 
-def execute(image_name: str) -> None:
+def execute(image_name: str, location: str = None) -> None:
     if not image_name:
         return False
     
-    image = image_service.get_image(image_name)
+    image = image_service.get_image(image_name, location)
 
     histogram = image_service.get_image_histogram(image)
 
@@ -19,11 +19,8 @@ def execute(image_name: str) -> None:
     image = image_service.get_image(image_name)
 
     equalized_img = cdf[image] * 255
-
     equalized_img = equalized_img.astype(np.uint8)
-
     equalized_img = image_service.create_from_array(equalized_img, 'L')
-    image_name = "equalized_" + image_name
     equalized_img.save(os.path.join(EQUALIZED_IMAGES_FOLDER, image_name))
 
     return image_name

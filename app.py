@@ -71,7 +71,7 @@ def apply_negative_effect():
     merge_percentage = data.get("mergePercentage")
     hiperboost = data.get("hiperboost")
     sobel = data.get("sobel")
-    mask_size = data.get("mask_size")
+    mask_size = data.get("maskSize")
 
     new_file = apply_filter_service.execute(
         filter_to_apply,
@@ -125,8 +125,9 @@ def get_histogram(file_name):
 def image_equalization():
     data = request.get_json()
     file_name = data.get("fileName")
+    location = data.get("from")
 
-    equalized_image = equalize_image.execute(file_name)
+    equalized_image = equalize_image.execute(file_name, location)
 
     return jsonify(
         {

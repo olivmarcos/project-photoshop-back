@@ -95,10 +95,7 @@ def execute(
         new_image = filters.compression(image_name, aValue, bValue)
         new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
 
-    if filter == "add-two-images":
-        if not merge_percentage:
-            return False
-        
+    if filter == "add-two-images":       
         new_image = filters.add_two_images(
             image_name, second_image_name, merge_percentage
         )

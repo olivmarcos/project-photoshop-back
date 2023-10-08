@@ -432,7 +432,7 @@ def prewitt_sobel(image_name: str, sobel: bool):
             copy.putpixel((i, j), output_pixel)
     return copy
 
-def min(image_name):
+def max_filter(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
     for i in range(0, image.size[0]):
@@ -447,7 +447,7 @@ def min(image_name):
     return copy
 
 
-def max(image_name):
+def min_filter(image_name):
     image = image_service.get_image(image_name)
     copy = image.copy()
     for i in range(0, image.size[0]):
