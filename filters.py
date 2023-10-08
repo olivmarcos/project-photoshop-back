@@ -265,6 +265,37 @@ def average(image_name):
     return copy
 
 
+def Max(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
+            mask = mask_intern(image, i, j)
+            Max = mask[0]
+            for x in mask:
+                if x > Max:
+                    Max = x
+            output_pixel = Max
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+
+def Min(image_name):
+    image = image_service.get_image(image_name)
+    copy = image.copy()
+    for i in range(0, image.size[0]):
+        for j in range(0, image.size[1]):
+            mask = mask_intern(image, i, j)
+            Min  = mask[0]
+            for x in mask:
+                if x < Min:
+                    Max = x
+            output_pixel = Min
+            copy.putpixel((i, j), output_pixel)
+    return copy
+
+
+
 def mask_intern(image, i, j):
     if i == 0:
         if j == 0:
