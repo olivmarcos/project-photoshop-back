@@ -1,3 +1,5 @@
+
+
 import numpy as np
 from PIL import Image
 import image_service
@@ -251,112 +253,83 @@ def bilinear_interpolation_resampling(image_name, scale_factor):
     return elarged_image
 
 
-def average(image_name):
+def mean(image_name): #, mask_size
     image = image_service.get_image(image_name)
     copy = image.copy()
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j)
-            sum = mask[0]
+            mask = mask_intern(image, i, j) #, mask_size
+            sum = np.sum(mask[0])
             mode = mask[1]
             avg = sum / mode
             output_pixel = int(np.round(avg))
             copy.putpixel((i, j), output_pixel)
     return copy
 
-
-def mask_intern(image, i, j):
+def mask_intern(image, i, j): #, mask_size
+    tam = 3
+    pixels= []
+    delta_center = int((tam - 1) / 2)
     if i == 0:
         if j == 0:
-            sum = (
-                image.getpixel((i, j))
-                + image.getpixel((i + 1, j))
-                + image.getpixel((i, j + 1))
-                + image.getpixel((i + 1, j + 1))
-            )
+            for x in range(i, i + delta_center + 1):
+                for y in range(j, j + delta_center + 1):
+                    pixels.append(image.getpixel((x, y)))
+            
             mode = 4
         elif j == image.size[1] - 1:
-            sum = (
-                image.getpixel((i, j))
-                + image.getpixel((i + 1, j))
-                + image.getpixel((i, j - 1))
-                + image.getpixel((i + 1, j - 1))
-            )
+            for x in range(i, i + delta_center + 1):
+                for y in range(j - delta_center, j + 1):
+                    pixels.append(image.getpixel((x, y)))
+            
             mode = 4
         else:
-            sum = (
-                image.getpixel((i, j - 1))
-                + image.getpixel((i, j))
-                + image.getpixel((i, j + 1))
-                + image.getpixel((i + 1, j - 1))
-                + image.getpixel((i + 1, j))
-                + image.getpixel((i + 1, j + 1))
-            )
+            for x in range(i, i + delta_center + 1):
+                for y in range(j - delta_center, j + delta_center + 1):
+                    pixels.append(image.getpixel((x, y)))
+
             mode = 6
 
     elif i == image.size[0] - 1:
         if j == 0:
-            sum = (
-                image.getpixel((i, j))
-                + image.getpixel((i - 1, j))
-                + image.getpixel((i, j + 1))
-                + image.getpixel((i - 1, j + 1))
-            )
+            for x in range(i - delta_center, i + 1):
+                for y in range(j, j + delta_center + 1):
+                    pixels.append(image.getpixel((x, y)))
+            
             mode = 4
         elif j == image.size[1] - 1:
-            sum = (
-                image.getpixel((i, j))
-                + image.getpixel((i - 1, j))
-                + image.getpixel((i, j - 1))
-                + image.getpixel((i - 1, j - 1))
-            )
+            for x in range(i - delta_center, i + 1):
+                for y in range(j - delta_center, j + 1):
+                    pixels.append(image.getpixel((x, y)))
+            
             mode = 4
         else:
-            sum = (
-                image.getpixel((i, j - 1))
-                + image.getpixel((i, j))
-                + image.getpixel((i, j + 1))
-                + image.getpixel((i - 1, j - 1))
-                + image.getpixel((i - 1, j))
-                + image.getpixel((i - 1, j + 1))
-            )
+            for x in range(i - delta_center, i + 1):
+                for y in range(j - delta_center, j + delta_center + 1):
+                    pixels.append(image.getpixel((x, y)))
+            
             mode = 6
 
     elif j == 0:
-        sum = (
-            image.getpixel((i - 1, j))
-            + image.getpixel((i, j))
-            + image.getpixel((i + 1, j))
-            + image.getpixel((i - 1, j + 1))
-            + image.getpixel((i, j + 1))
-            + image.getpixel((i + 1, j + 1))
-        )
+        for x in range(i - delta_center, i + delta_center + 1):
+            for y in range(j, j + delta_center + 1):
+                pixels.append(image.getpixel((x, y)))
+        
         mode = 6
     elif j == image.size[1] - 1:
-        sum = (
-            image.getpixel((i - 1, j))
-            + image.getpixel((i, j))
-            + image.getpixel((i + 1, j))
-            + image.getpixel((i - 1, j - 1))
-            + image.getpixel((i, j - 1))
-            + image.getpixel((i + 1, j - 1))
-        )
+        for x in range(i - delta_center, i + delta_center + 1):
+            for y in range(j - delta_center, j + 1):
+                pixels.append(image.getpixel((x, y)))
+        
         mode = 6
     else:
-        sum = (
-            image.getpixel((i - 1, j))
-            + image.getpixel((i, j))
-            + image.getpixel((i + 1, j))
-            + image.getpixel((i - 1, j - 1))
-            + image.getpixel((i, j - 1))
-            + image.getpixel((i + 1, j - 1))
-            + image.getpixel((i - 1, j + 1))
-            + image.getpixel((i, j + 1))
-            + image.getpixel((i + 1, j + 1))
-        )
+        for x in range(i - delta_center, i + delta_center + 1):
+            for y in range(j - delta_center, j + delta_center + 1):
+                pixels.append(image.getpixel((x, y)))
+        
         mode = 9
 
-    return [sum, mode]
+    return [pixels, mode]
 
 
 def laplace(image_name: str, hiperboost: bool):
@@ -366,12 +339,12 @@ def laplace(image_name: str, hiperboost: bool):
         for j in range(0, image.size[1]):
             mask = mask_intern(image, i, j)
 
-            sum = mask[0] - image.getpixel((i, j))
+            sum = np.sum(mask[0]) - image.getpixel((i, j))
             mode = 8
             if hiperboost is True:
                 mode = mode + 1
 
-            output_pixel = (mode * image.getpixel((i, j))) - sum
+            output_pixel = int((mode * image.getpixel((i, j))) - sum)
             if (
                 (i == 0)
                 or (j == 0)
