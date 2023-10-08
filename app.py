@@ -71,6 +71,7 @@ def apply_negative_effect():
     merge_percentage = data.get("mergePercentage")
     hiperboost = data.get("hiperboost")
     sobel = data.get("sobel")
+    mask_size = data.get("mask_size")
 
     new_file = apply_filter_service.execute(
         filter_to_apply,
@@ -83,6 +84,7 @@ def apply_negative_effect():
         merge_percentage,
         hiperboost,
         sobel,
+        mask_size,
     )
 
     return jsonify(

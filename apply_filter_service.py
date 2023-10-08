@@ -17,7 +17,7 @@ ALLOWED_FILTERS = [
     "add-two-images",
     "nearest-neighbor-resampling",
     "bilinear-interpolation-resampling",
-    "average",
+    "mean",
     "horizontal-mirroring",
     "vertical-mirroring",
     "laplace",
@@ -27,7 +27,6 @@ ALLOWED_FILTERS = [
 
 def allowed_filter(filter):
     return filter in ALLOWED_FILTERS
-
 
 def execute(
     filter,
@@ -39,7 +38,8 @@ def execute(
     scale_factor,
     merge_percentage,
     hiperboost: bool,
-    sobel: bool
+    sobel: bool,
+    mask_size
 ):
     if not filter or not image_name:
         return False
@@ -112,8 +112,8 @@ def execute(
         new_image = filters.bilinear_interpolation_resampling(image_name, scale_factor)
         new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
 
-    if filter == "average":
-        new_image = filters.average(image_name)
+    if filter == "mean":
+        new_image = filters.mean(image_name, mask_size)
         new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
 
     if filter == "laplace":
