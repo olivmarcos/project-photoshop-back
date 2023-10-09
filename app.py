@@ -20,7 +20,7 @@ app.config["IMAGES_HISTOGRAMS_FOLDER"] = IMAGES_HISTOGRAMS_FOLDER
 EQUALIZED_IMAGES_FOLDER = "equalized_images"
 app.config["EQUALIZED_IMAGES_FOLDER"] = EQUALIZED_IMAGES_FOLDER
 
-allowed_origins = ["http://localhost:5173", "https://fake-photoshop.onrender.com"]
+allowed_origins = ["http://localhost:5173", "https://project-photoshop-front.vercel.app/"]
 CORS(app, resources={r"/api/*": {"origins": allowed_origins}})
 
 
