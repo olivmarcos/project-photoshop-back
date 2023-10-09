@@ -8,7 +8,7 @@ ALLOWED_EXTENSIONS = {"png", "jpg", "jpeg", 'bmp'}
 def allowed_file(file_name: str) -> bool:
     return "." in file_name and file_name.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
 
-def execute(file) -> str | bool:
+def execute(file):
     if not allowed_file(file.filename):
         return False
     
