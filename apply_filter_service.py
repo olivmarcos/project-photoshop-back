@@ -23,7 +23,9 @@ ALLOWED_FILTERS = [
     "horizontal-mirroring",
     "vertical-mirroring",
     "laplace",
-    "prewitt_sobel"
+    "prewitt_sobel",
+    "min",
+    "max"
 ]
 
 
@@ -129,6 +131,15 @@ def execute(
 
     if filter == "prewitt_sobel":
         new_image = filters.prewitt_sobel(image_name, sobel)
+        new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
+
+        
+    if filter == "min":
+        new_image = filters.min_filter(image_name, mask_size)
+        new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
+
+    if filter == "min":
+        new_image = filters.max_filter(image_name, mask_size)
         new_image.save(os.path.join(FILTERED_IMAGES_FOLDER, image_name))
 
     return image_name

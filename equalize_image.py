@@ -17,8 +17,6 @@ def execute(image_name: str, location: str = None) -> None:
 
     cdf = np.cumsum(normalized_histogram)
 
-    image = image_service.get_image(image_name)
-
     equalized_img = cdf[image] * 255
     equalized_img = equalized_img.astype(np.uint8)
     equalized_img = image_service.create_from_array(equalized_img, 'L')

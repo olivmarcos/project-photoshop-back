@@ -126,7 +126,7 @@ def image_equalization():
     data = request.get_json()
     file_name = data.get("fileName")
     location = data.get("from")
-
+    
     equalized_image = equalize_image.execute(file_name, location)
 
     return jsonify(

@@ -419,33 +419,43 @@ def prewitt_sobel(image_name: str, sobel: bool):
             copy.putpixel((i, j), output_pixel)
     return copy
 
-def max_filter(image_name):
+def max_filter(image_name, mask_size):
     image = image_service.get_image(image_name)
     copy = image.copy()
+
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j)
-            Max = mask[0]
-            for x in mask:
-                if x > Max:
-                    Max = x
-            output_pixel = Max
+            mask = mask_intern(image, i, j, mask_size) 
+            selected_pixels = mask[0]
+            max_value = selected_pixels[0]
+
+            for x in selected_pixels:
+                if x > max_value:
+                    max_value = x
+
+            output_pixel = max_value
             copy.putpixel((i, j), output_pixel)
+
     return copy
 
 
-def min_filter(image_name):
+def min_filter(image_name, mask_size):
     image = image_service.get_image(image_name)
     copy = image.copy()
+
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j)
-            Min  = mask[0]
-            for x in mask:
-                if x < Min:
-                    Max = x
-            output_pixel = Min
+            mask = mask_intern(image, i, j, mask_size) 
+            selected_pixels = mask[0]
+            min_value = selected_pixels[0]
+
+            for x in selected_pixels:
+                if x < min_value:
+                    min_value = x
+
+            output_pixel = min_value
             copy.putpixel((i, j), output_pixel)
+
     return copy
 
 def mean(image_name, mask_size):
