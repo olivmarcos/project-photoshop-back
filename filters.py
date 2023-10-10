@@ -1,5 +1,3 @@
-
-
 import numpy as np
 from PIL import Image
 import image_service
@@ -253,9 +251,9 @@ def bilinear_interpolation_resampling(image_name, scale_factor):
     return elarged_image
 
 
-def mask_intern(image, i, j, mask_size): 
+def mask_intern(image, i, j, mask_size):
     tam = mask_size
-    pixels= []
+    pixels = []
     iteracoes = 0
     delta_center = int((tam - 1) / 2)
 
@@ -278,26 +276,25 @@ def mask_intern(image, i, j, mask_size):
         loopYMin = 0
     else:
         loopYMin = j - delta_center
-        
+
     if i == 0:
         if j == 0:
             for x in range(i, loopXMax):
                 for y in range(j, loopYMax):
                     iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
-            
+
         elif j == image.size[1] - 1:
             for x in range(i, loopXMax):
                 for y in range(loopYMin, j + 1):
                     iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
-            
+
         else:
             for x in range(i, loopXMax):
                 for y in range(loopYMin, loopYMax):
                     iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
-
 
     elif i == image.size[0] - 1:
         if j == 0:
@@ -305,38 +302,37 @@ def mask_intern(image, i, j, mask_size):
                 for y in range(j, loopYMax):
                     iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
-            
+
         elif j == image.size[1] - 1:
             for x in range(loopXMin, i + 1):
                 for y in range(loopYMin, j + 1):
                     iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
-            
+
         else:
             for x in range(loopXMin, i + 1):
                 for y in range(loopYMin, loopYMax):
                     iteracoes = iteracoes + 1
                     pixels.append(image.getpixel((x, y)))
-            
 
     elif j == 0:
         for x in range(loopXMin, loopXMax):
             for y in range(j, loopYMax):
                 iteracoes = iteracoes + 1
                 pixels.append(image.getpixel((x, y)))
-        
+
     elif j == image.size[1] - 1:
         for x in range(loopXMin, loopXMax):
             for y in range(loopYMin, j + 1):
                 iteracoes = iteracoes + 1
                 pixels.append(image.getpixel((x, y)))
-        
+
     else:
         for x in range(loopXMin, loopXMax):
             for y in range(loopYMin, loopYMax):
                 iteracoes = iteracoes + 1
                 pixels.append(image.getpixel((x, y)))
-        
+
     mode = iteracoes
     return [pixels, mode]
 
@@ -346,7 +342,7 @@ def laplace(image_name: str, hiperboost: bool):
     copy = image.copy()
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j, 3) 
+            mask = mask_intern(image, i, j, 3)
 
             sum = np.sum(mask[0]) - image.getpixel((i, j))
             mode = 8
@@ -366,7 +362,7 @@ def laplace(image_name: str, hiperboost: bool):
     return copy
 
 
-def prewitt_sobel(image_name: str, sobel: bool):  
+def prewitt_sobel(image_name: str, sobel: bool):
     image = image_service.get_image(image_name)
     copy = image.copy()
 
@@ -419,13 +415,14 @@ def prewitt_sobel(image_name: str, sobel: bool):
             copy.putpixel((i, j), output_pixel)
     return copy
 
+
 def max_filter(image_name, mask_size):
     image = image_service.get_image(image_name)
     copy = image.copy()
 
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j, mask_size) 
+            mask = mask_intern(image, i, j, mask_size)
             selected_pixels = mask[0]
             max_value = selected_pixels[0]
 
@@ -445,7 +442,7 @@ def min_filter(image_name, mask_size):
 
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j, mask_size) 
+            mask = mask_intern(image, i, j, mask_size)
             selected_pixels = mask[0]
             min_value = selected_pixels[0]
 
@@ -458,12 +455,13 @@ def min_filter(image_name, mask_size):
 
     return copy
 
+
 def mean(image_name, mask_size):
     image = image_service.get_image(image_name)
     copy = image.copy()
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j, mask_size) 
+            mask = mask_intern(image, i, j, mask_size)
             sum = np.sum(mask[0])
             mode = mask[1]
             avg = sum / mode
@@ -471,19 +469,26 @@ def mean(image_name, mask_size):
             copy.putpixel((i, j), output_pixel)
     return copy
 
+
 def mode(image_name, mask_size):
     image = image_service.get_image(image_name)
     copy = image.copy()
+    
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j, mask_size) 
+            mask = mask_intern(image, i, j, mask_size)
             selected_pixels = mask[0]
-            output_pixel = find_mode(selected_pixels)
-            if not output_pixel:
-                output_pixel = image.getpixel((i, j))
+            modes = find_mode(selected_pixels)
+            output_pixel = modes[0]
+
+            if len(modes) > 1:
+                output_pixel = get_the_closest_mode_by_given_value(
+                    modes, image.getpixel((i, j))
+                )
 
             copy.putpixel((i, j), output_pixel)
     return copy
+
 
 def find_mode(data):
     num_count = {}
@@ -498,22 +503,33 @@ def find_mode(data):
 
     modes = [num for num, count in num_count.items() if count == max_count]
 
-    if len(modes) == 1:
-        return modes[0]
-    else:
-        return None
+    return modes
+
+
+def get_the_closest_mode_by_given_value(modes, target_value):
+    differences = [abs(mode - target_value) for mode in modes]
+    min_difference = min(differences)
+
+    closest_modes = [
+        mode for mode, diff in zip(modes, differences) if diff == min_difference
+    ]
+    chosen_mode = max(closest_modes)
+
+    return chosen_mode
+
 
 def median(image_name, mask_size):
     image = image_service.get_image(image_name)
     copy = image.copy()
     for i in range(0, image.size[0]):
         for j in range(0, image.size[1]):
-            mask = mask_intern(image, i, j, mask_size) 
+            mask = mask_intern(image, i, j, mask_size)
             selected_pixels = mask[0]
             median_pixel = calculate_median(selected_pixels)
             output_pixel = int(np.round(median_pixel))
             copy.putpixel((i, j), output_pixel)
     return copy
+
 
 def calculate_median(numbers):
     sorted_numbers = sorted(numbers)
